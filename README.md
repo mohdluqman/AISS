@@ -1,6 +1,6 @@
 # AISS Lab website
 
-A static academic research-group website. All page text and sections are managed through folders and Markdown. GitHub Actions generates and publishes the HTML. No database, server, CMS or JavaScript build system is required.
+A static academic research-group website inspired by PreCog's clear research-focused presentation. All page text and sections are managed through folders and Markdown. GitHub Actions generates and publishes the HTML. No database, server, CMS or JavaScript build system is required.
 
 ## The only content rule
 
@@ -152,6 +152,7 @@ Python 3.12 is recommended.
 ```sh
 python -m pip install -r requirements.txt
 python scripts/build.py
+python scripts/check_build.py
 python -m http.server 8000 --directory dist
 ```
 
@@ -162,7 +163,7 @@ Visit `http://localhost:8000`. The generated site goes to `dist/` and can be ser
 1. Upload all files and folders to the repository root, including `.github/workflows/deploy.yml`.
 2. In the repository settings, select **Pages > Build and deployment > GitHub Actions**.
 3. Push to `main`, or run **Build and deploy AISS static website** from the Actions tab. The workflow installs Python dependencies, builds Markdown and publishes `dist/`.
-4. The included `CNAME` contains `aiss.mohdluqman.com`. Point that subdomain DNS to the GitHub Pages host before using it. If deploying to a default `username.github.io/repository` subpath instead, you will need to adjust the absolute-root asset and navigation URLs or use a custom domain.
+4. The included `CNAME` contains `aiss.mohdluqman.com`. Point that subdomain DNS to the GitHub Pages host before using it. The builder generates relative links, so assets and navigation work at a custom domain or the default `username.github.io/repository/` subpath. For a repository subpath, update `site_url` and workflow `SITE_URL` to that full address, and remove `CNAME` unless you use the custom domain.
 5. To change the canonical URL, edit `site_url` in `site.json` **and** `SITE_URL` in `.github/workflows/deploy.yml`.
 
 The build creates `sitemap.xml`, `feed.xml`, `robots.txt` and `.nojekyll` automatically. The RSS feed reflects News sections.
@@ -177,3 +178,11 @@ The build creates `sitemap.xml`, `feed.xml`, `robots.txt` and `.nojekyll` automa
 - `dist/`: generated output; rebuild instead of editing it.
 
 This package retains only the verified material available in the earlier project. Sections that do not have confirmed member details, course information, funded roles or released datasets remain editable descriptions rather than fabricated listings.
+
+## Troubleshooting styles or images not loading
+
+The HTML uses relative asset URLs such as `./assets/site.css` on the homepage and `../assets/site.css` on subpages. This works for GitHub Pages project subpaths and custom domain roots. If you previously deployed the old build, rebuild and redeploy the complete `dist/` directory, then perform a hard refresh to clear cached HTML.
+
+Use `python scripts/check_build.py` after building to catch missing stylesheets, images, navigation pages and downloadable files. For local preview, run `python -m http.server 8000 --directory dist` and open `http://localhost:8000/`, rather than opening the HTML file directly.
+
+If a custom domain is configured, confirm that its DNS and GitHub Pages domain setting both match `CNAME`. The URLs in `site.json` and workflow `SITE_URL` must match the actual public address for canonical metadata, RSS and sitemap links.
