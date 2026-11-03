@@ -1,6 +1,6 @@
 # AISS Lab website
 
-A static academic research-group website inspired by PreCog's clear research-focused presentation. All page text and sections are managed through folders and Markdown. GitHub Actions generates and publishes the HTML. No database, server, CMS or JavaScript build system is required.
+A static academic research-group website. All page text and sections are managed through folders and Markdown. GitHub Actions generates and publishes the HTML. No database, server, CMS or JavaScript build system is required.
 
 ## The only content rule
 
